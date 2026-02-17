@@ -192,6 +192,7 @@ function saveTodo() {
 
   saveTodos();
   renderList();
+  updateCategoryFilters();
   closeModal();
 }
 
@@ -213,6 +214,22 @@ function saveTodos() {
   localStorage.setItem("todos", JSON.stringify(todos));
 }
 
+function updateCategoryFilters() {
+  const filterContainer = document.getElementById("filter-buttons");
+  const categories = getCategories();
+  
+  const categoryButtons = categories.map(cat => 
+    `<button class="filter-btn" data-filter="category-${cat}" onclick="setFilter('category-${cat}')">${cat}</button>`
+  ).join("");
+  
+  filterContainer.innerHTML = `
+    <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">Alle</button>
+    <button class="filter-btn" data-filter="pending" onclick="setFilter('pending')">Ausstehend</button>
+    <button class="filter-btn" data-filter="completed" onclick="setFilter('completed')">Erledigt</button>
+    ${categoryButtons}
+  `;
+}
+
 function setFilter(filter) {
   currentFilter = filter;
   document.querySelectorAll(".filter-btn").forEach(btn => {
@@ -224,6 +241,11 @@ function setFilter(filter) {
 
 function handleSearch(value) {
   renderList();
+}
+
+function getCategories() {
+  const categories = new Set(todos.map(t => t.category).filter(c => c));
+  return Array.from(categories);
 }
 
 // Drag and Drop Funktionen
@@ -288,34 +310,14 @@ document.addEventListener("keypress", function (e) {
   }
 });
 
-// Zusatzfunktionen für Kategorien
-function getCategories() {
-  const categories = new Set(todos.map(t => t.category).filter(c => c));
-  return Array.from(categories);
+// Initialisierung beim Laden der Seite
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
 }
 
-function updateCategoryFilters() {
-  const filterContainer = document.getElementById("filter-buttons");
-  const categories = getCategories();
-  
-  const categoryButtons = categories.map(cat => 
-    `<button class="filter-btn" data-filter="category-${cat}" onclick="setFilter('category-${cat}')">${cat}</button>`
-  ).join("");
-  
-  filterContainer.innerHTML = `
-    <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">Alle</button>
-    <button class="filter-btn" data-filter="pending" onclick="setFilter('pending')">Ausstehend</button>
-    <button class="filter-btn" data-filter="completed" onclick="setFilter('completed')">Erledigt</button>
-    ${categoryButtons}
-  `;
-}
-
-// Initialisierung
-renderList();
-updateCategoryFilters();
-
-// Aktualisiert Kategorien wenn neue hinzugefügt werden
-const observer = new MutationObserver(() => {
+function init() {
+  renderList();
   updateCategoryFilters();
-});
-observer.observe(document.body, { childList: true, subtree: true });
+}
