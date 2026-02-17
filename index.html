@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do Liste 2026</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>📝 Meine To-Do Liste</h1>
+      <div id="header-stats" class="header-stats"></div>
+
+      <div class="controls">
+        <input
+          type="text"
+          id="search-box"
+          class="search-box"
+          placeholder="🔍 Aufgaben durchsuchen..."
+          onkeyup="handleSearch(this.value)"
+        />
+        <button class="add-button" onclick="openAddModal()">
+          + Neue Aufgabe
+        </button>
+      </div>
+
+      <div id="filter-buttons" class="filter-buttons"></div>
+
+      <div id="empty-state" class="empty-state" style="display: none">
+        <div class="empty-state-icon">✨</div>
+        <p>Keine Aufgaben gefunden!</p>
+        <button class="add-button" onclick="openAddModal()">
+          Mit + Neue Aufgabe starten
+        </button>
+      </div>
+
+      <ul class="todo-list" id="todo-list"></ul>
+    </div>
+
+    <!-- Modal für neue/bearbeitete Aufgabe -->
+    <div id="add-modal" class="modal">
+      <div class="modal-content">
+        <h2 id="modal-title">Neue Aufgabe</h2>
+
+        <div class="form-group">
+          <label for="todo-text">Aufgabe:</label>
+          <input
+            type="text"
+            id="todo-text"
+            placeholder="Was musst du tun?"
+            autofocus
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="todo-description">Beschreibung (optional):</label>
+          <textarea
+            id="todo-description"
+            placeholder="Zusätzliche Details zur Aufgabe..."
+          ></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="todo-category">Kategorie:</label>
+            <select id="todo-category">
+              <option value="Allgemein">Allgemein</option>
+              <option value="Arbeit">Arbeit</option>
+              <option value="Privat">Privat</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Hobby">Hobby</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="todo-priority">Priorität:</label>
+            <select id="todo-priority">
+              <option value="low">Weniger wichtig</option>
+              <option value="medium" selected>Wichtig</option>
+              <option value="high">Sehr wichtig</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="todo-duedate">Fälligkeitsdatum (optional):</label>
+          <input type="date" id="todo-duedate" />
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn btn-secondary" onclick="closeModal()">
+            Abbrechen
+          </button>
+          <button class="btn btn-primary" onclick="saveTodo()">
+            Speichern
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
